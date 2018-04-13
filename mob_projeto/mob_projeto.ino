@@ -20,12 +20,13 @@ int redValue = 0;           // red value lcd 0-255
 int greenValue = 0;         // green value lcd 0-255
 int blueValue = 0;          // blue value lcd 0-255
 
-int targetTemp = 0;         // target temperature the user wants
+int targetTemp = 0;         // target temperature the user wants, received from the APP
+double currentTemp;			// current temperature, to be sent to the APP
 
 // Timers
 
 // States
-int operatingMode = 0;      // 0 - Manual, 1 - Auto 
+int operatingMode = 0;      // 0 - Auto, 1 - Manual, to be sent to the APP
 
 // LCD
 rgb_lcd lcd;
