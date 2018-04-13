@@ -20,10 +20,12 @@ int redValue = 0;           // red value lcd 0-255
 int greenValue = 0;         // green value lcd 0-255
 int blueValue = 0;          // blue value lcd 0-255
 
+int targetTemp = 0;         // target temperature the user wants
+
 // Timers
 
 // States
-
+int operatingMode = 0;      // 0 - Manual, 1 - Auto 
 
 // LCD
 rgb_lcd lcd;

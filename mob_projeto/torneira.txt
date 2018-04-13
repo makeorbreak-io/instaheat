@@ -1,0 +1,5 @@
+public class Torneira {
+	private double temp;
+	private double state;
+	private String name;
+	
