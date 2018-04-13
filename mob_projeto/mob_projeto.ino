@@ -1,6 +1,9 @@
 #include <Wire.h>    /* Communication with Arduino */
 #include <rgb_lcd.h> /* LCD */
 #include <WiFi.h>
+#include "calculations.h"
+#include "appSettings.h"
+#include "constants.h"
 
 // PIN's
 //input
@@ -20,10 +23,15 @@ int redValue = 0;           // red value lcd 0-255
 int greenValue = 0;         // green value lcd 0-255
 int blueValue = 0;          // blue value lcd 0-255
 
+int targetTemp = 0;         // target temperature the user wants, received from the APP
+double currentTemp;			// current temperature, to be sent to the APP
+
+int temperatureSetting = CELSIUS_TEMP;	// received from the APP
+
 // Timers
 
 // States
-
+int operatingMode = AUTOMATIC_STATE;    // to be sent to the APP
 
 // LCD
 rgb_lcd lcd;

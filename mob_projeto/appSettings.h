@@ -1,0 +1,1 @@
+int changeOperatingMode(int operatingMode);

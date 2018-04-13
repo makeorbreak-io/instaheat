@@ -1,0 +1,1 @@
+double convertAnalogSignalToTemperature(int analogSignal, int tempSetting);
