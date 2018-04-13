@@ -3,21 +3,10 @@
 #include <WiFi.h>
 #include "calculations.h"
 #include "appSettings.h"
-
-// Fixed values, dont touch this
-const int AUTOMATIC_STATE = 0;
-const int MANUAL_STATE = 1;
-
-const int CELSIUS_TEMP = 0;
-const int FAHRN_TEMP = 1;
-const int KELVIN_TEMP = 2;
+#include "constants.h"
 
 // PIN's
 //input
-#define RELAY1  2
-#define RELAY2  3
-#define RELAY3  4
-#define RELAY4  5
 int tempPin = 1;            // temperature sensor
 int moreTempButtonPin = 1;  // button to increase temperature
 int lessTempButtonPin = 1;  // button to decrease temperature
@@ -48,10 +37,6 @@ int operatingMode = AUTOMATIC_STATE;    // to be sent to the APP
 rgb_lcd lcd;
 
 void setup() {
-  pinMode(RELAY1, OUTPUT);
-  pinMode(RELAY2, OUTPUT);
-  pinMode(RELAY3, OUTPUT);
-  pinMode(RELAY4, OUTPUT);
 
   pinMode(tempPin, INPUT);
   pinMode(moreTempButtonPin, INPUT);
@@ -82,27 +67,12 @@ void setup() {
 }
 
 void loop() {
-  digitalWrite(RELAY1, LOW);          // Turns ON Relays 1
-  delay(2000);                                      // Wait 2 seconds
-  digitalWrite(RELAY1, HIGH);         // Turns Relay Off
-
-  digitalWrite(RELAY2, LOW);          // Turns ON Relays 2
-  delay(2000);                                      // Wait 2 seconds
-  digitalWrite(RELAY2, HIGH);         // Turns Relay Off
-
-  digitalWrite(RELAY3, LOW);          // Turns ON Relays 3
-  delay(2000);                                      // Wait 2 seconds
-  digitalWrite(RELAY3, HIGH);         // Turns Relay Off
-
-  digitalWrite(RELAY4, LOW);          // Turns ON Relays 4
-  delay(2000);                                      // Wait 2 seconds
-  digitalWrite(RELAY4, HIGH);         // Turns Relay Off
   /*
-    lcd.setRGB(red_value, green_value, blue_value);
-    lcd.newclear(10);
-    lcd.setCursor(0, 0);
-    lcd.print("Message");
-    lcd.clear();
+  lcd.setRGB(red_value, green_value, blue_value);
+  lcd.newclear(10);
+  lcd.setCursor(0, 0);
+  lcd.print("Message");
+  lcd.clear();
   */
 
   delay(500);
