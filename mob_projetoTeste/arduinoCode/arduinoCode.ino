@@ -1,15 +1,11 @@
-//#include "rgb_lcd.h" /* LCD */
-//#include <Wire.h> /* LCD */
-
 #define RELAY1  2
 #define RELAY2  3
 #define RELAY3  4
 #define RELAY4  5
 #define ONOFFSWITCH  6 //Switch ON OFF
-#define TEMPMAIS  7 //TEMP+
-#define TEMPMENOS  8 //TEMP-
 
 int tempDesejada = 0;
+float reading;
 
 //rgb_lcd lcd;
 
@@ -24,12 +20,11 @@ void setup() {
   pinMode(RELAY3, OUTPUT);
   pinMode(RELAY4, OUTPUT);
   pinMode(ONOFFSWITCH, INPUT);
-  pinMode(TEMPMAIS, INPUT);
-  pinMode(TEMPMENOS, INPUT);
   digitalWrite(RELAY1, HIGH);
   digitalWrite(RELAY2, HIGH);
   digitalWrite(RELAY3, HIGH);
   digitalWrite(RELAY4, HIGH);
+  pinMode(A2, INPUT);
 
   /*Serial.begin(9600);
 
@@ -49,14 +44,20 @@ void setup() {
 }
 
 void loop() {
-  Serial.println(tempDesejada );
-  if (digitalRead(TEMPMAIS ) == LOW) {
+  reading = (5.0 * analogRead(A2) * 100.0) / 1024; // Converts the analog voltage from sensor to digital reading where 5 is the supply voltage i.e. 5V
+  // prints the data onto serial monitor
+  Serial.print("Temperature is: "); //println prints next thing on a new line
+  Serial.print((float)reading); // Prints current temperature on Monitor
+  Serial.println(" *C");
+
+  //Serial.println(tempDesejada );
+  /*if (digitalRead(TEMPMAIS ) == HIGH) {
     tempDesejada++;
-  }
-  if (digitalRead(TEMPMENOS ) == LOW) {
-    tempDesejada--;
-  }
-  if (digitalRead(ONOFFSWITCH) == LOW) {
+    }*/
+  /* if (digitalRead(TEMPMENOS ) == HIGH) {
+     tempDesejada--;
+    }*/
+  if (digitalRead(ONOFFSWITCH) == HIGH) {
   } else {
     digitalWrite(RELAY1, HIGH);         // Motor 1 Desligado
     digitalWrite(RELAY2, HIGH);         // Motor 2 Desligado
@@ -69,7 +70,10 @@ void loop() {
     delay(500);
     digitalWrite(RELAY4, HIGH);         // Válvula 2 Fechada
   }
+
   delay(1000);
+
+
 
   /* lcd.setRGB(redValue, greenValue, blueValue);
     lcd.newclear(10);
