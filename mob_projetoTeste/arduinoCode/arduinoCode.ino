@@ -1,13 +1,12 @@
-#define RELAY1  2
-#define RELAY2  3
-#define RELAY3  4
-#define RELAY4  5
-#define ONOFFSWITCH  6 //Switch ON OFF
-#define MANUAL  7 //Manual
-#define BUTTON1  8 //Butão 1
-#define BUTTON2  9 //Butão 2
-#define MANUAL2 10 //Manual
-
+#define RELAY1  2 //Relay Motor 1
+#define RELAY2  3 //Relay Motor 2
+#define RELAY3  4 //Válvula 1
+#define RELAY4  5 //Válvula 2
+#define SwitchAUTO  6 //Switch 1
+#define SwitchONOFF  7 //Switch 2
+#define SwitchMANUAL  10 //Switch 3
+#define BUTTON1  8 //BUTTON 1 (Aberto quando carregado)
+#define BUTTON2  9 //BUTTON 2 (Aberto quando carregado)
 int tempDesejada = 0;
 float reading = 0;
 
@@ -23,9 +22,8 @@ void setup() {
   pinMode(RELAY2, OUTPUT);
   pinMode(RELAY3, OUTPUT);
   pinMode(RELAY4, OUTPUT);
-  pinMode(ONOFFSWITCH, INPUT);
-  pinMode(MANUAL, INPUT);
-  pinMode(MANUAL2, INPUT);
+  pinMode(Switch1, INPUT);
+  pinMode(Switch2, INPUT);
   digitalWrite(RELAY1, HIGH);
   digitalWrite(RELAY2, HIGH);
   digitalWrite(RELAY3, HIGH);
@@ -58,14 +56,39 @@ void loop() {
 
   //getTemp();
 
-  systemOnOff();
+  //systemOnOff();
 
-  //butoes();
+  /*int state = HIGH;
+    int reading;
+    int previous = LOW;
 
+    long time = 0;
+    long debounce = 200;
+
+    if (reading == HIGH && previous == LOW && millis() - time > debounce) {
+    if (state == HIGH)
+      state = LOW;
+    else
+      state = HIGH;
+
+    time = millis();
+    }
+
+    Serial.println(digitalRead(ONOFFSWITCH));
+
+    previous = reading;*/
+
+  /*Serial.println(digitalRead(BUTTON1));
+    Serial.println(digitalRead(BUTTON2));
+    Serial.println();
+
+    //butoes();*/
+  testeButo();
   delay(1000);
 }
 
-void getRotation() {
+/*// Get Rotation
+  void getRotation() {
   int sensor_value = analogRead(A3);
   float voltage;
   voltage = (float)sensor_value * 5 / 1023;
@@ -73,18 +96,20 @@ void getRotation() {
   //int brightness;
   //brightness = map(degrees, 0, 300, 0, 255);
   Serial.println(degrees);
-}
+  }
 
-void getTemp() {
+  // Temp tm35
+  void getTemp() {
   reading = (5.0 * analogRead(A2) * 100.0) / 1024; // Converts the analog voltage from sensor to digital reading where 5 is the supply voltage i.e. 5V
   // prints the data onto serial monitor
   Serial.print("Temperature is: "); //println prints next thing on a new line
   Serial.print((float)reading); // Prints current temperature on Monitor
   Serial.println(" *C");
-}
+  }
 
-void systemOnOff() {
-  if (digitalRead(ONOFFSWITCH) == LOW) {
+  //Switch System On Off
+  void systemOnOff() {
+  if (digitalRead(ONOFFSWITCH) == HIGH) {
   } else {
     digitalWrite(RELAY1, HIGH);         // Motor 1 Desligado
     digitalWrite(RELAY2, HIGH);         // Motor 2 Desligado
@@ -97,9 +122,10 @@ void systemOnOff() {
     //delay(500);
     //digitalWrite(RELAY4, HIGH);         // Válvula 2 Fechada
   }
-}
+  }
 
-void butoes() {
+  // Butões Definir Temp / Abrir Torneira
+  void butoes() {
   if (digitalRead(BUTTON1) == HIGH) {
     Serial.println("1");
   }
@@ -117,4 +143,13 @@ void butoes() {
   } else {
     Serial.println("PIN10 OFF");
   }
+  }
+*/
+void testeButo() {
+  Serial.println(digitalRead(Switch1));
+  Serial.println(digitalRead(Switch3));
+  //Serial.println(digitalRead(Switch2));
+  //Serial.println(digitalRead(BUTTON1));
+  //Serial.println(digitalRead(BUTTON2));
+  Serial.println();
 }
