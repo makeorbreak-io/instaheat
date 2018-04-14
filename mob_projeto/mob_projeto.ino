@@ -23,7 +23,7 @@ int redValue = 0;           // red value lcd 0-255
 int greenValue = 0;         // green value lcd 0-255
 int blueValue = 0;          // blue value lcd 0-255
 
-int targetTemp = /*MIN_TEMP*/5;         // target temperature the user wants, received from the APP
+int targetTemp = MIN_TEMP;         // target temperature the user wants, received from the APP
 int currentTemp = 0;			// current temperature, to be sent to the APP
 
 int temperatureSetting = CELSIUS_TEMP;	// pretended temperature unit, received from the APP
@@ -86,8 +86,8 @@ void setup() {
 void loop() {
   // measures the temperature registered by the thermometer every second
   if(thermometerTimer == 0) {
-    //currentTemp = convertAnalogSignalToTemperature(analogRead(tempPin), temperatureSetting);
-    currentTemp++;
+    currentTemp = convertAnalogSignalToTemperature(analogRead(tempPin), temperatureSetting);
+    //currentTemp++;
     startThermometerTimer();
   }
 
@@ -109,7 +109,7 @@ void loop() {
     heating = 0;
   }
 
-  
+
 
   defaultDisplayInOpenedMode();
 
@@ -127,7 +127,7 @@ void startThermometerTimer() {
 }
 
 void startCantReachTargetTemperatureTimer() {
-	cantReachTargetTemperatureTimer = ONE_SEC * 10;
+	cantReachTargetTemperatureTimer = ONE_SEC * 60;
 }
 
 bool isTimerActive(int timer) {
