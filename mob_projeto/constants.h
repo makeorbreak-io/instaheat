@@ -8,7 +8,7 @@
 #define KELVIN_TEMP 		2
 
 // Temperature limits
-#define MIN_TEMP 			0
+#define MIN_TEMP 			1
 #define MAX_TEMP 			75
 
 // Ratio between analog signal from temperature sensor and Degrees Celsius

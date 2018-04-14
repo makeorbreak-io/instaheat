@@ -13,16 +13,11 @@ int changeOperatingMode(int operatingMode) {
 	}
 }
 
-int adjustRedColorWithTemperature(double currentTemperature, int targetTemperature) {
+int adjustRedColorWithTemperature(int currentTemperature, int targetTemperature) {
 	double ratio;
 
-	// absolute temperature
-	//ratio = currentTemperature / MAX_TEMP;
-
-	// OR
-
 	// relative temperature
-	ratio = currentTemperature / targetTemperature;
+	ratio = (double)currentTemperature / targetTemperature;
 
 	if(ratio < 0) return 0;
 	if(ratio > 1) return 255;
@@ -30,16 +25,11 @@ int adjustRedColorWithTemperature(double currentTemperature, int targetTemperatu
 	return ratio * 255;
 }
 
-int adjustBlueColorWithTemperature(double currentTemperature, int targetTemperature) {
+int adjustBlueColorWithTemperature(int currentTemperature, int targetTemperature) {
 	double ratio;
 
-	// absolute temperature
-	//ratio = (MAX_TEMP - currentTemperature) / MAX_TEMP;
-
-	// OR
-
 	// relative temperature
-	ratio = (targetTemperature - currentTemperature) / targetTemperature;
+	ratio = (double)(targetTemperature - currentTemperature) / targetTemperature;
 
 	if(ratio < 0) return 0;
 	if(ratio > 1) return 255;
