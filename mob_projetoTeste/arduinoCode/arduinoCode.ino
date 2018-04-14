@@ -7,8 +7,17 @@
 #define SwitchMANUAL  10 //Switch 3
 #define BUTTON1  8 //BUTTON 1 (Aberto quando carregado)
 #define BUTTON2  9 //BUTTON 2 (Aberto quando carregado)
+#define TERMO  11
 int tempDesejada = 0;
 float reading = 0;
+
+#include "OneWire.h"
+#include "DallasTemperature.h"
+OneWire oneWire(TERMO);
+float tempMin = 999;
+float tempMax = 0;
+DallasTemperature sensors(&oneWire);
+DeviceAddress sensor1;
 
 //rgb_lcd lcd;
 
@@ -18,18 +27,21 @@ float reading = 0;
 
 void setup() {
   Serial.begin(9600);
+  sensors.begin();
   pinMode(RELAY1, OUTPUT);
   pinMode(RELAY2, OUTPUT);
   pinMode(RELAY3, OUTPUT);
   pinMode(RELAY4, OUTPUT);
-  pinMode(Switch1, INPUT);
-  pinMode(Switch2, INPUT);
+  pinMode(SwitchAUTO, INPUT);
+  pinMode(SwitchONOFF, INPUT);
+  pinMode(SwitchMANUAL, INPUT);
   digitalWrite(RELAY1, HIGH);
   digitalWrite(RELAY2, HIGH);
   digitalWrite(RELAY3, HIGH);
   digitalWrite(RELAY4, HIGH);
   digitalWrite(BUTTON1, INPUT);
   digitalWrite(BUTTON2, INPUT);
+  digitalWrite(TERMO, INPUT);
   pinMode(A2, INPUT);
   pinMode(A3, INPUT);
 
@@ -83,7 +95,8 @@ void loop() {
     Serial.println();
 
     //butoes();*/
-  testeButo();
+
+  testeTermo();
   delay(1000);
 }
 
@@ -145,11 +158,31 @@ void loop() {
   }
   }
 */
-void testeButo() {
+/*void testeButo() {
   Serial.println(digitalRead(Switch1));
   Serial.println(digitalRead(Switch3));
   //Serial.println(digitalRead(Switch2));
   //Serial.println(digitalRead(BUTTON1));
   //Serial.println(digitalRead(BUTTON2));
   Serial.println();
+  }*/
+void testeTermo() {
+  sensors.requestTemperatures();
+  float tempC = sensors.getTempC(sensor1);
+  // Atualiza temperaturas minima e maxima
+  if (tempC < tempMin)
+  {
+    tempMin = tempC;
+  }
+  if (tempC > tempMax)
+  {
+    tempMax = tempC;
+  }
+  // Mostra dados no serial monitor
+  Serial.print("Temp C: ");
+  Serial.print(tempC);
+  Serial.print(" Min : ");
+  Serial.print(tempMin);
+  Serial.print(" Max : ");
+  Serial.println(tempMax);
 }
