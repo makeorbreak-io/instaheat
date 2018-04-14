@@ -16,3 +16,17 @@ double convertAnalogSignalToTemperature(int analogSignal, int tempSetting) {
 			return -1;
 	}
 }
+
+int increaseTargetTemperature(int currentTemperature) {
+	if(validateTemperature(currentTemperature++)) return currentTemperature;
+	return currentTemperature++;
+}
+
+int decreaseTargetTemperature(int currentTemperature) {
+	if(validateTemperature(currentTemperature--)) return currentTemperature;
+	return currentTemperature--;
+}
+
+bool validateTemperature(int temperature) {
+	return (temperature < MAX_TEMP && temperature > MIN_TEMP);
+}

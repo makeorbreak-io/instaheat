@@ -2,36 +2,36 @@
 #include <rgb_lcd.h> /* LCD */
 #include <WiFi.h>
 #include "calculations.h"
-#include "appSettings.h"
+#include "settings.h"
 #include "constants.h"
 
 // PIN's
 //input
-int tempPin = 1;            // temperature sensor
-int moreTempButtonPin = 1;  // button to increase temperature
-int lessTempButtonPin = 1;  // button to decrease temperature
-int openTapPin = 1;         // open tap manually
-int switchModePin = 1;      // switch operating mode
-int resetButtonPin = 1;     // insert button pin
+const int tempPin = 1;            // temperature sensor
+const int moreTempButtonPin = 1;  // button to increase temperature
+const int lessTempButtonPin = 1;  // button to decrease temperature
+const int openTapPin = 1;         // open tap manually
+const int switchModePin = 1;      // switch operating mode
+const int resetButtonPin = 1;     // insert button pin
 //output
-int eletroValve2Pin = 1;    // eletrovalve 2
-int eletroValve1Pin = 1;    // eletrovalve 1
-int lcdPin = 1;             // lcd
+const int eletroValveHeaterPin = 1; // eletrovalve 2
+const int eletroValveTapPin = 1;    // eletrovalve 1
+const int lcdPin = 1;             	// lcd
 
 // Variables
 int redValue = 0;           // red value lcd 0-255
 int greenValue = 0;         // green value lcd 0-255
 int blueValue = 0;          // blue value lcd 0-255
 
-int targetTemp = 0;         // target temperature the user wants, received from the APP
+int targetTemp = MIN_TEMP;         // target temperature the user wants, received from the APP
 double currentTemp;			// current temperature, to be sent to the APP
 
-int temperatureSetting = CELSIUS_TEMP;	// received from the APP
+int temperatureSetting = CELSIUS_TEMP;	// pretended temperature unit, received from the APP
 
 // Timers
 
 // States
-int operatingMode = AUTOMATIC_STATE;    // to be sent to the APP
+int operatingMode = AUTOMATIC_STATE;    // operating mode, to be sent to the APP
 
 // LCD
 rgb_lcd lcd;
@@ -45,8 +45,8 @@ void setup() {
   pinMode(switchModePin, INPUT);
   pinMode(resetButtonPin, INPUT);
 
-  pinMode(eletroValve1Pin, OUTPUT);
-  pinMode(eletroValve2Pin, OUTPUT);
+  pinMode(eletroValveTapPin, OUTPUT);
+  pinMode(eletroValveHeaterPin, OUTPUT);
   pinMode(lcdPin, OUTPUT);
 
   Serial.begin(9600);
@@ -74,6 +74,33 @@ void loop() {
   lcd.print("Message");
   lcd.clear();
   */
-
-  delay(500);
+  
+  
+  delay(DEFAULT_DELAY);
 }
+
+void updateTimers() {
+	// if(timer_name > 0) timer_name--; fazer isto para todos os timers
+}
+
+// one per timer
+void startTimerName() {
+	// timer_name = defined_value;
+}
+
+bool isTimerActive(int timer) {
+	return timer > 0;
+}
+
+void switchWaterFlowToTap() {
+	digitalWrite(eletroValveTapPin, HIGH);
+	digitalWrite(eletroValveHeaterPin, LOW);
+}	
+
+void switchWaterFlowToHeater() {
+	digitalWrite(eletroValveTapPin, LOW);
+	digitalWrite(eletroValveHeaterPin, HIGH);
+}	
+
+
+
