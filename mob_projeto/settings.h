@@ -1,3 +1,3 @@
 int changeOperatingMode(int operatingMode);
-double adjustRedColorWithTemperature(double currentTemperature, int targetTemperature);
-double adjustBlueColorWithTemperature(double currentTemperature, int targetTemperature);
+int adjustRedColorWithTemperature(double currentTemperature, int targetTemperature);
+int adjustBlueColorWithTemperature(double currentTemperature, int targetTemperature);
