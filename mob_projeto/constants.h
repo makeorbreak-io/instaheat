@@ -12,11 +12,11 @@
 #define MAX_TEMP 			75
 
 // Ratio between analog signal from temperature sensor and Degrees Celsius
- #define CELSIUS_RATIO		2
+ #define CELSIUS_RATIO		1
 
 // Time measures
-#define DEFAULT_DELAY		50
-#define ONE_SEC				20
+#define DEFAULT_DELAY		200
+#define ONE_SEC				5
 
 // Pins and entrances
 #define SD_CARD     4

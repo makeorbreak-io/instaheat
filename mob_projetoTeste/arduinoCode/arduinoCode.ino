@@ -18,7 +18,7 @@ OneWire oneWire(TERMO);
 float tempMin = 999;
 float tempMax = 0;
 DallasTemperature sensors(&oneWire);
-String data_received = "";
+char data_received = 0;
 String data_sent = "";
 
 //rgb_lcd lcd;
@@ -68,21 +68,18 @@ void setup() {
 }
 
 void loop() {
-  if (Serial.available() > 0) {
+  while (Serial.available() > 0) {
     data_received = Serial.read();
     Serial.print(data_received);
     Serial.print("\n");
-    if (data_received == "CC:1")
+    if (data_received == '1')
       digitalWrite(BLUETOOTH, HIGH);
-    else if (data_received == "CC:2")
+    else if (data_received == '0')
       digitalWrite(BLUETOOTH, LOW);
   }
   double temp = getTemp();
   delay(1000);
-  data_sent = "";
-  data_sent += "CT:";
-  data_sent+=temp;
-  Serial.print(data_sent);
+  Serial.print(temp);
   Serial.print("\n");
 
   if (digitalRead(7) == HIGH) {
