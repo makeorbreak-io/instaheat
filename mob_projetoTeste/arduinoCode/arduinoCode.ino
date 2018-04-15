@@ -17,7 +17,6 @@ OneWire oneWire(TERMO);
 float tempMin = 999;
 float tempMax = 0;
 DallasTemperature sensors(&oneWire);
-DeviceAddress sensor1;
 
 //rgb_lcd lcd;
 
@@ -44,6 +43,8 @@ void setup() {
   digitalWrite(TERMO, INPUT);
   pinMode(A2, INPUT);
   pinMode(A3, INPUT);
+  //digitalWrite(RELAY3, LOW);
+  //digitalWrite(RELAY4, LOW);
 
   /*Serial.begin(9600);
 
@@ -63,6 +64,22 @@ void setup() {
 }
 
 void loop() {
+  if (digitalRead(7) == HIGH) {
+    openMotor1(true);
+    openMotor2(true);
+  } else {
+    openMotor1(false);
+    openMotor2(false);
+  }
+  if (digitalRead(6) == HIGH) {
+    openValve1(true);
+    openValve2(true);
+  } else {
+    openValve1(false);
+    openValve2(false);
+  }
+  if (digitalRead(8) == HIGH) {}
+  if (digitalRead(9) == HIGH) {}
 
   //getRotation();
 
@@ -96,8 +113,7 @@ void loop() {
 
     //butoes();*/
 
-  testeTermo();
-  delay(1000);
+  //testeTermo();
 }
 
 /*// Get Rotation
@@ -166,23 +182,40 @@ void loop() {
   //Serial.println(digitalRead(BUTTON2));
   Serial.println();
   }*/
-void testeTermo() {
+/*void testeTermo() {
+  Serial.print(" Requesting temperatures...");
   sensors.requestTemperatures();
-  float tempC = sensors.getTempC(sensor1);
-  // Atualiza temperaturas minima e maxima
-  if (tempC < tempMin)
-  {
-    tempMin = tempC;
+  Serial.println("DONE");
+  Serial.print("Temperature is: ");
+  Serial.print(sensors.getTempCByIndex(0));
+  delay(1000);
+  }*/
+
+void openMotor1(boolean state) {
+  if (state == true) {
+    digitalWrite(RELAY1, LOW);
+  } else {
+    digitalWrite(RELAY1, HIGH);
   }
-  if (tempC > tempMax)
-  {
-    tempMax = tempC;
+}
+void openMotor2(boolean state) {
+  if (state == true) {
+    digitalWrite(RELAY2, LOW);
+  } else {
+    digitalWrite(RELAY2, HIGH);
   }
-  // Mostra dados no serial monitor
-  Serial.print("Temp C: ");
-  Serial.print(tempC);
-  Serial.print(" Min : ");
-  Serial.print(tempMin);
-  Serial.print(" Max : ");
-  Serial.println(tempMax);
+}
+void openValve1(boolean state) {
+  if (state == true) {
+    digitalWrite(RELAY3, LOW);
+  } else {
+    digitalWrite(RELAY3, HIGH);
+  }
+}
+void openValve2(boolean state) {
+  if (state == true) {
+    digitalWrite(RELAY4, LOW);
+  } else {
+    digitalWrite(RELAY4, HIGH);
+  }
 }
