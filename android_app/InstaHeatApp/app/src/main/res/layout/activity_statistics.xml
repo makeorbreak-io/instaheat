@@ -20,7 +20,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="1.0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,39 +33,18 @@
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
-                android:text="Saved Water"
+                android:text="Database"
                 tools:layout_editor_absoluteX="163dp"
                 tools:layout_editor_absoluteY="27dp" />
 
-            <TextView
-                android:id="@+id/textView8"
+            <EditText
+                android:id="@+id/editText"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:text="TextView"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="136dp" />
-
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="match_parent"
-                android:layout_height="34dp"
-                android:text="TextView"
-                tools:layout_editor_absoluteX="89dp"
-                tools:layout_editor_absoluteY="62dp" />
-
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:text="TextView" />
-
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="TextView"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="160dp" />
+                android:layout_height="438dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:layout_editor_absoluteX="65dp"
+                tools:layout_editor_absoluteY="186dp" />
 
         </LinearLayout>
     </ScrollView>

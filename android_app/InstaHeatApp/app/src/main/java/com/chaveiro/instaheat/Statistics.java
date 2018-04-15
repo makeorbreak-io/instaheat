@@ -5,6 +5,9 @@ import android.os.Bundle;
 
 public class Statistics extends AppCompatActivity {
 
+    //private PlainText databaseText;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

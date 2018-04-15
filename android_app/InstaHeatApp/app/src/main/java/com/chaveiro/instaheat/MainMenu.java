@@ -3,6 +3,7 @@ package com.chaveiro.instaheat;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -17,9 +18,11 @@ import android.widget.Toast;
 
 import android.os.Handler;
 
+//import com.chaveiro.instaheat.domain.AppData;
 import com.chaveiro.instaheat.domain.Utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,6 +51,8 @@ public class MainMenu extends AppCompatActivity {
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothDevice device;
     private BluetoothSocket socket;
+    //private AppData database;
+    private double time = 0;
 
     private final static int REQUEST_ENABLE_BT = 1;
 
@@ -71,6 +76,11 @@ public class MainMenu extends AppCompatActivity {
                     break;
                 }
             }
+            //ContentValues values = new ContentValues();
+            //values.put("temperature", (String )msg.obj);
+            //values.put("time", time);
+            //time+=1.5;
+            //database.getWritableDatabase().insert(AppData.TABLE_NAME, null,  values);
         }
     };
 
@@ -82,6 +92,8 @@ public class MainMenu extends AppCompatActivity {
         setTapsSpinner();
         setTempsSpinner();
 
+        //init database
+        //confDb();
 
         //conf activities starters
         confSettingsButton();
@@ -104,6 +116,21 @@ public class MainMenu extends AppCompatActivity {
 
     }
 
+    private void confDb() {
+        //database = new AppData(getApplicationContext());
+    }
+
+    @Override
+    public void onBackPressed() {
+        try{
+            socket.close();
+        } catch(Exception e){
+            //
+        }
+        finish();
+        return;
+    }
+
     private void confStatus() {
         opModeView = findViewById(R.id.op_mode_text);
         regionView = findViewById(R.id.region_text);
@@ -122,12 +149,30 @@ public class MainMenu extends AppCompatActivity {
         if (mBluetoothAdapter == null) {
             Toast.makeText(getApplicationContext(), "Bluetooth Not Supported", Toast.LENGTH_SHORT).show();
         } else {
-            if (!mBluetoothAdapter.isEnabled()) {
+            while(!mBluetoothAdapter.isEnabled()) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             }
+            Intent intent = new Intent();
+            BluetoothDevice device = intent.getParcelableExtra("android.bluetooth.device.extra.DEVICE");
+            try{
+                device.getClass().getMethod("setPairingConfirmation", boolean.class).invoke(device, true);
+                device.getClass().getMethod("cancelPairingUserInput").invoke(device);
+            } catch(Exception e){
+                //Toast.makeText(getApplicationContext(), "Couldn't start pairing process" , Toast.LENGTH_SHORT).show();
+            }
             device = mBluetoothAdapter.getBondedDevices().iterator().next();
             Toast.makeText(getApplicationContext(), device.getName() + "\n" + device.getAddress(), Toast.LENGTH_SHORT).show();
+            boolean thrown = true;
+            while(thrown){
+                try{
+                    socket = (BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(device, 1);
+                    socket.connect();
+                    thrown = false;
+                }catch(Exception e){
+                    Toast.makeText(getApplicationContext(), "Connection Setup Failed\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 
@@ -136,12 +181,11 @@ public class MainMenu extends AppCompatActivity {
         ledOnButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 try {
-                    socket = device.createRfcommSocketToServiceRecord(myUUID);
-                    socket = (BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(device, 1);
-                    socket.connect();
+                    //socket = (BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(device, 1);
+                    //socket.connect();
                     socket.getOutputStream().write(("1").getBytes());
                     Toast.makeText(getApplicationContext(), "Connection Successful", Toast.LENGTH_SHORT).show();
-                    socket.close();
+                    //socket.close();
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "Connection Setup Failed\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -154,12 +198,11 @@ public class MainMenu extends AppCompatActivity {
         ledOffButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 try {
-                    socket = device.createRfcommSocketToServiceRecord(myUUID);
-                    socket = (BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(device, 1);
-                    socket.connect();
+                    //socket = (BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(device, 1);
+                    //socket.connect();
                     socket.getOutputStream().write(("0").getBytes());
                     Toast.makeText(getApplicationContext(), "Connection Successful", Toast.LENGTH_SHORT).show();
-                    socket.close();
+                    //socket.close();
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "Connection Setup Failed\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -174,9 +217,9 @@ public class MainMenu extends AppCompatActivity {
                 while (true) {
                     try {
                         Thread.sleep(1500);
-                        socket = device.createRfcommSocketToServiceRecord(myUUID);
-                        socket = (BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(device, 1);
-                        socket.connect();
+                        //socket = device.createRfcommSocketToServiceRecord(myUUID);
+                        //socket = (BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(device, 1);
+                        //socket.connect();
                         byte[] tempRead = new byte[256]; // for analog input
                         socket.getInputStream().read(tempRead);
                         String sRead = new String(tempRead);
@@ -185,7 +228,7 @@ public class MainMenu extends AppCompatActivity {
                         msg.obj = sSplit[0];
                         msg.setTarget(tempHandler);
                         msg.sendToTarget();
-                        socket.close();
+                        //socket.close();
                     } catch (Exception e) {
                         //do nothing, can't show toast on worker threads
                     }
@@ -242,11 +285,45 @@ public class MainMenu extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 if (getTemperature() != 0) {
                     try {
-                        socket = (BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(device, 1);
-                        socket.connect();
+                        //socket = (BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(device, 1);
+                        //socket.connect();
                         int tTemperature = tempsSpinner.getSelectedItemPosition();
-                        socket.getOutputStream().write(tTemperature);
-                        socket.close();
+                        switch(tTemperature){
+                            case(25):{
+                                tTemperature = 2;
+                                break;
+                            }
+                            case(27):{
+                                tTemperature = 3;
+                                break;
+                            }
+                            case(29):{
+                                tTemperature = 4;
+                                break;
+                            }
+                            case(31):{
+                                tTemperature = 5;
+                                break;
+                            }
+                            case(33):{
+                                tTemperature = 6;
+                                break;
+                            }
+                            case(36):{
+                                tTemperature = 7;
+                                break;
+                            }
+                            case(38):{
+                                tTemperature = 8;
+                                break;
+                            }
+                            case(39):{
+                                tTemperature = 9;
+                                break;
+                            }
+                        }
+                        socket.getOutputStream().write((""+tTemperature).getBytes());
+                        //socket.close();
                         Toast.makeText(getApplicationContext(), getTemperature() + "ºC", Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(), "Could not Set Target Temperature", Toast.LENGTH_SHORT).show();
@@ -271,7 +348,7 @@ public class MainMenu extends AppCompatActivity {
             }
             case ("Fahrenheit"): {
                 for (int i = 0; i < MAX_TEMP; i++) {
-                    temps.add("" + String.format("%.1f", Utils.CelsiusToFahrenheit(i)) + "ºF");
+                    temps.add("" + Utils.CelsiusToFahrenheit(i) + "ºF");
                 }
                 break;
             }
