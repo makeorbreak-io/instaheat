@@ -1,0 +1,13 @@
+if(currentTemp >= targetTemp) {
+  if(operatingMode == AUTOMATIC_STATE) {
+    switchWaterFlowToTap();
+  }
+}
+
+if(operatingMode == MANUAL_STATE) {
+  if(digitalRead(switch_pin) == HIGH) {
+    switchWaterFlowToTap();
+  } else if(digitalRead(switch_pin) == LOW){
+    switchWaterFlowToHeater();
+  }
+}

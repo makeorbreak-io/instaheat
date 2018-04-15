@@ -1,9 +1,20 @@
-/*#include <SD.h>
+#include <SD.h>
 #include "constants.h"
 #include <String.h>
+#include <stdio.h>
 
 const double DEFAULT_TIME = 0;
 const double DEFAULT_INDEX = 0;
+
+void writeLine(File file, int temp, double avgTime, int index) {
+  String x = String(temp + ", ");
+  x = String(x + avgTime);
+  x = String(x + ", ");
+  x = String(x + index);
+  file.println(x);
+  Serial.print(x);
+  //file.print("%2d, %7.2f, %6d\n", temp, avgTime, index);
+}
 
 void resetDatabase() {
   if(!SD.begin(SD_CARD)) {
@@ -20,7 +31,7 @@ void resetDatabase() {
 
   int i;
   for(i = 0; i <= 75; i=i+5) { // i = temperatures 1-75
-    writeLine(csvFile, i, DEFAULT_TIME, DEFAULT_INDEX);
+    writeLine(csvFile, i, 0, 0);
   }
 
   csvFile.close();
@@ -46,7 +57,7 @@ void updateTemperatureValue(int targetTemperature, int numberOfCycles) {
   double time, totalTime;
 
   while (csvFile.available()) {
-    line = myFile.read();
+    line = csvFile.read();
     textTemp = line.substring(0,1);
     textTemp.trim();
     temp = textTemp.toInt();
@@ -73,6 +84,3 @@ void updateTemperatureValue(int targetTemperature, int numberOfCycles) {
   csvFile.close();
 }
 
-void writeLine(File file, int temp, double avgTime, int index) {
-  file.print("%2d, %7.2f, %6d\n", temp, avgTime, index);
-}*/
