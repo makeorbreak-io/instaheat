@@ -8,6 +8,7 @@
 #define BUTTON1  8 //BUTTON 1 (Aberto quando carregado)
 #define BUTTON2  9 //BUTTON 2 (Aberto quando carregado)
 #define TERMO  11
+#define BLUETOOTH  13
 int tempDesejada = 0;
 float reading = 0;
 
@@ -17,6 +18,8 @@ OneWire oneWire(TERMO);
 float tempMin = 999;
 float tempMax = 0;
 DallasTemperature sensors(&oneWire);
+String data_received = "";
+String data_sent = "";
 
 //rgb_lcd lcd;
 
@@ -41,8 +44,9 @@ void setup() {
   digitalWrite(BUTTON1, INPUT);
   digitalWrite(BUTTON2, INPUT);
   digitalWrite(TERMO, INPUT);
+  pinMode(A1, INPUT);
   pinMode(A2, INPUT);
-  pinMode(A3, INPUT);
+  pinMode(BLUETOOTH, OUTPUT);
   //digitalWrite(RELAY3, LOW);
   //digitalWrite(RELAY4, LOW);
 
@@ -64,6 +68,23 @@ void setup() {
 }
 
 void loop() {
+  if (Serial.available() > 0) {
+    data_received = Serial.read();
+    Serial.print(data_received);
+    Serial.print("\n");
+    if (data_received == "CC:1")
+      digitalWrite(BLUETOOTH, HIGH);
+    else if (data_received == "CC:2")
+      digitalWrite(BLUETOOTH, LOW);
+  }
+  double temp = getTemp();
+  delay(1000);
+  data_sent = "";
+  data_sent += "CT:";
+  data_sent+=temp;
+  Serial.print(data_sent);
+  Serial.print("\n");
+
   if (digitalRead(7) == HIGH) {
     openMotor1(true);
     openMotor2(true);
@@ -118,59 +139,60 @@ void loop() {
 
 /*// Get Rotation
   void getRotation() {
-  int sensor_value = analogRead(A3);
+  int sensor_value = analogRead(A2);
   float voltage;
   voltage = (float)sensor_value * 5 / 1023;
   float degrees = (voltage * 300) / 5;
   //int brightness;
   //brightness = map(degrees, 0, 300, 0, 255);
   Serial.println(degrees);
-  }
+  }*/
 
-  // Temp tm35
-  void getTemp() {
-  reading = (5.0 * analogRead(A2) * 100.0) / 1024; // Converts the analog voltage from sensor to digital reading where 5 is the supply voltage i.e. 5V
+// Temp tm35
+double getTemp() {
+  reading = (5.0 * analogRead(A1) * 100.0) / 1024; // Converts the analog voltage from sensor to digital reading where 5 is the supply voltage i.e. 5V
   // prints the data onto serial monitor
   Serial.print("Temperature is: "); //println prints next thing on a new line
   Serial.print((float)reading); // Prints current temperature on Monitor
   Serial.println(" *C");
-  }
+  return reading;
+}
 
-  //Switch System On Off
+/*//Switch System On Off
   void systemOnOff() {
   if (digitalRead(ONOFFSWITCH) == HIGH) {
   } else {
-    digitalWrite(RELAY1, HIGH);         // Motor 1 Desligado
-    digitalWrite(RELAY2, HIGH);         // Motor 2 Desligado
+  digitalWrite(RELAY1, HIGH);         // Motor 1 Desligado
+  digitalWrite(RELAY2, HIGH);         // Motor 2 Desligado
 
-    digitalWrite(RELAY3, LOW);          // Válvula 1 Aberta
-    // delay(500);
-    //digitalWrite(RELAY3, HIGH);         // Válvula 1 Fechada
+  digitalWrite(RELAY3, LOW);          // Válvula 1 Aberta
+  // delay(500);
+  //digitalWrite(RELAY3, HIGH);         // Válvula 1 Fechada
 
-    digitalWrite(RELAY4, LOW);          // Válvula 2 Aberta
-    //delay(500);
-    //digitalWrite(RELAY4, HIGH);         // Válvula 2 Fechada
+  digitalWrite(RELAY4, LOW);          // Válvula 2 Aberta
+  //delay(500);
+  //digitalWrite(RELAY4, HIGH);         // Válvula 2 Fechada
   }
   }
 
   // Butões Definir Temp / Abrir Torneira
   void butoes() {
   if (digitalRead(BUTTON1) == HIGH) {
-    Serial.println("1");
+  Serial.println("1");
   }
   if (digitalRead(BUTTON2) == HIGH) {
-    Serial.println("2");
+  Serial.println("2");
   }
 
   if (digitalRead(MANUAL) == HIGH) {
-    Serial.println("PIN7 ON");
+  Serial.println("PIN7 ON");
   } else {
-    Serial.println("PIN7 OFF");
+  Serial.println("PIN7 OFF");
   }
   if (digitalRead(MANUAL2) == HIGH) {
-    Serial.println("PIN10 ON");
+  Serial.println("PIN10 ON");
   } else {
-    Serial.println("PIN10 OFF");
+  Serial.println("PIN10 OFF");
   }
   }
 */
