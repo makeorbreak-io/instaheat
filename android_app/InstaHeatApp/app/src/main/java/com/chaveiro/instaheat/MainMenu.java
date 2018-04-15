@@ -140,7 +140,6 @@ public class MainMenu extends AppCompatActivity {
         stopButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 try {
-                    socket = device.createRfcommSocketToServiceRecord(myUUID);
                     socket = (BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(device, 1);
                     socket.connect();
                     socket.getOutputStream().write("0".getBytes());
@@ -159,7 +158,7 @@ public class MainMenu extends AppCompatActivity {
             public void run() {
                 while (true) {
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(1500);
                         socket = device.createRfcommSocketToServiceRecord(myUUID);
                         socket = (BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(device, 1);
                         socket.connect();
